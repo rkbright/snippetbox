@@ -19,9 +19,13 @@ func showSnippet(w http.ResponseWriter, r *http.Request) {
 }
 
 func createSnippet(w http.ResponseWriter, r *http.Request) {
-	w.Write([]byte("Create a new snippet..."))
+	if r.Method != "POST" {
+		w.Header().Set("Allow", "POST")
+		w.Header()["Date"] = nil
+		http.Error(w, "Method Not Allowed", 405)
+		w.Write([]byte("Create a new snippet..."))
+	}
 }
-
 func main() {
 	mux := http.NewServeMux()
 	mux.HandleFunc("/", home)
